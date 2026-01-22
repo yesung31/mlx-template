@@ -17,9 +17,9 @@ class TensorBoardLogger:
 
         save_dir = Path(save_dir)
         if version is None:
-            version = 0  # simplified versioning logic
+            version = ""  # simplified versioning logic
 
-        self.log_dir = save_dir / name / f"version_{version}"
+        self.log_dir = save_dir / name / version
         self.experiment = SummaryWriter(log_dir=str(self.log_dir))
 
     def log_metrics(self, metrics, step=None):
