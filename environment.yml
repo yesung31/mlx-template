@@ -1,0 +1,14 @@
+name: mlx
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - hydra-core
+  - wandb
+  - scipy
+  - tqdm
+  - rich
+  - pip
+
+  - pip:
+    - mlx
