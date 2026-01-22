@@ -4,6 +4,7 @@ import mlx.nn as nn
 class MetricContext:
     def __init__(self):
         self.metrics = {}
+        self.metadata = {}
 
 
 class LightningModule(nn.Module):
@@ -32,3 +33,4 @@ class LightningModule(nn.Module):
 
     def log(self, name, value, prog_bar=False, logger=True):
         self._metric_ctx.metrics[name] = value
+        self._metric_ctx.metadata[name] = {"prog_bar": prog_bar, "logger": logger}

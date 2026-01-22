@@ -21,8 +21,6 @@ class ModelCheckpoint:
     def on_validation_end(self, trainer, pl_module):
         logs = trainer.logged_metrics
         if self.monitor not in logs:
-            if self.verbose:
-                print(f"ModelCheckpoint: {self.monitor} not found in logs. Skipping save.")
             return
 
         current_score = logs[self.monitor]
@@ -39,20 +37,7 @@ class ModelCheckpoint:
             fname = f"epoch={trainer.current_epoch}-{self.monitor}={current_score:.4f}.npz"
             path = os.path.join(self.dirpath, fname)
 
-            if self.verbose:
-                print(
-                    f"ModelCheckpoint: {self.monitor} improved to {current_score:.4f}. "
-                    f"Saving to {path}"
-                )
-
             # Save weights
-            # MLX save format is typically npz or safetensors.
-            # Using mx.savez for simplicity with dict
-            # Flatten or keep structure? mx.save_safetensors is better for nested,
-            # but let's just use mx.save which handles dict of arrays
-            # Actually pl_module.parameters() returns a nested dict.
-            # mx.save_safetensors is preferred.
-            # but standard save might be simpler.
             pl_module.save_weights(path)
 
             self.best_k_models[path] = current_score
@@ -60,16 +45,6 @@ class ModelCheckpoint:
             # Handle top k (cleanup old)
             if len(self.best_k_models) > self.save_top_k:
                 # remove worst
-                sorted_models = sorted(
-                    self.best_k_models.items(), key=lambda x: x[1], reverse=(self.mode != "min")
-                )
-                to_remove_path, _ = sorted_models[-1]  # worst is last if we sorted by best first?
-                # wait: if min mode (lower better), sorted ascending puts best first. worst is last.
-                # if max mode (higher better), sorted ascending puts worst first.
-
-                # easier: sort by "goodness".
-                # if min: smallest is best. sort ascending. [0] is best. [-1] is worst.
-                # if max: largest is best. sort descending. [0] is best. [-1] is worst.
                 reverse = True if self.mode == "max" else False
                 sorted_models = sorted(
                     self.best_k_models.items(), key=lambda x: x[1], reverse=reverse
