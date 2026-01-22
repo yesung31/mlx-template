@@ -1,6 +1,9 @@
 import warnings
+
 import numpy as np
-from core import LightningDataModule, SimpleDataset, DataLoader
+
+from core import DataLoader, LightningDataModule, SimpleDataset
+
 
 class TemplateDataModule(LightningDataModule):
     def __init__(self, **kwargs):
@@ -17,9 +20,15 @@ class TemplateDataModule(LightningDataModule):
 
     def setup(self, stage=None):
         # Create dummy data: 100 samples, 32 dimensions
-        self.train_dataset = SimpleDataset(np.random.randn(100, 32).astype(np.float32), np.random.randint(0, 2, (100,)))
-        self.val_dataset = SimpleDataset(np.random.randn(20, 32).astype(np.float32), np.random.randint(0, 2, (20,)))
-        self.test_dataset = SimpleDataset(np.random.randn(20, 32).astype(np.float32), np.random.randint(0, 2, (20,)))
+        self.train_dataset = SimpleDataset(
+            np.random.randn(100, 32).astype(np.float32), np.random.randint(0, 2, (100,))
+        )
+        self.val_dataset = SimpleDataset(
+            np.random.randn(20, 32).astype(np.float32), np.random.randint(0, 2, (20,))
+        )
+        self.test_dataset = SimpleDataset(
+            np.random.randn(20, 32).astype(np.float32), np.random.randint(0, 2, (20,))
+        )
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=32, shuffle=True)

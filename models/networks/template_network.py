@@ -1,5 +1,6 @@
 import mlx.nn as nn
 
+
 class TemplateNetwork(nn.Module):
     def __init__(self):
         super().__init__()

@@ -1,13 +1,16 @@
 import warnings
+
 import mlx.nn as nn
 import mlx.optimizers as optim
+
 from core import LightningModule
 from models.networks.template_network import TemplateNetwork
+
 
 class TemplateModel(LightningModule):
     def __init__(self, **kwargs):
         super().__init__()
-        
+
         # Initialize the dummy network
         self.net = TemplateNetwork()
         warnings.warn(

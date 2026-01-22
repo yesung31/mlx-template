@@ -1,5 +1,6 @@
-import numpy as np
 import mlx.core as mx
+import numpy as np
+
 
 class SimpleDataset:
     def __init__(self, *arrays):
@@ -14,6 +15,7 @@ class SimpleDataset:
     def __len__(self):
         return self.length
 
+
 class DataLoader:
     def __init__(self, dataset, batch_size=1, shuffle=False):
         self.dataset = dataset
@@ -24,11 +26,11 @@ class DataLoader:
     def __iter__(self):
         if self.shuffle:
             np.random.shuffle(self.indexes)
-        
+
         for start in range(0, len(self.dataset), self.batch_size):
             end = start + self.batch_size
             batch_indexes = self.indexes[start:end]
-            
+
             # Optimized slicing for SimpleDataset if possible
             if isinstance(self.dataset, SimpleDataset):
                 # Slice directly

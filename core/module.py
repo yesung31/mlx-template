@@ -1,8 +1,10 @@
 import mlx.nn as nn
 
+
 class MetricContext:
     def __init__(self):
         self.metrics = {}
+
 
 class LightningModule(nn.Module):
     def __init__(self):

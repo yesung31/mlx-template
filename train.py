@@ -2,13 +2,13 @@ import os
 from pathlib import Path
 
 import hydra
-import wandb
 import mlx.core as mx
+import wandb
 from omegaconf import DictConfig, OmegaConf
 
 import data
 import models
-from core import Trainer, ModelCheckpoint, TensorBoardLogger, WandbLogger
+from core import ModelCheckpoint, TensorBoardLogger, Trainer, WandbLogger
 from utils.helpers import get_resume_info, instantiate, register_resolvers
 
 register_resolvers()

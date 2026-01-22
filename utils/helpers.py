@@ -46,7 +46,8 @@ def get_resume_info(log_dir):
 def instantiate(Class, cfg):
     kwargs = OmegaConf.to_container(cfg, resolve=True)
 
-    # We pass the relevant sub-configs as kwargs, excluding 'name' which is used for class resolution.
+    # We pass the relevant sub-configs as kwargs,
+    # excluding 'name' which is used for class resolution.
     kwargs.pop("name", None)
 
     return Class(**kwargs)
