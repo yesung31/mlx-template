@@ -65,4 +65,6 @@ class ModelSummary:
         self.console.print(f"[bold]Trainable params[/bold]: {total_trainable:,}")
         self.console.print(f"[bold]Non-trainable params[/bold]: {non_trainable:,}")
         self.console.print(f"[bold]Total params[/bold]: {total_params:,}")
-        self.console.print(f"[bold]Total estimated model params size[/bold]: {self._format_size(total_size)}")
+        self.console.print(
+            f"[bold]Total estimated model params size[/bold]: {self._format_size(total_size)}"
+        )

@@ -2,7 +2,22 @@ import warnings
 
 import numpy as np
 
-from core import DataLoader, LightningDataModule, SimpleDataset
+from core import DataLoader, LightningDataModule
+from core.data import Dataset
+
+
+class SimpleDataset(Dataset):
+    def __init__(self, *arrays):
+        self.arrays = arrays
+        self.length = len(arrays[0])
+        for arr in arrays:
+            assert len(arr) == self.length, "All arrays must have same length"
+
+    def __getitem__(self, index):
+        return tuple(arr[index] for arr in self.arrays)
+
+    def __len__(self):
+        return self.length
 
 
 class TemplateDataModule(LightningDataModule):

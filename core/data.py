@@ -2,18 +2,12 @@ import mlx.core as mx
 import numpy as np
 
 
-class SimpleDataset:
-    def __init__(self, *arrays):
-        self.arrays = arrays
-        self.length = len(arrays[0])
-        for arr in arrays:
-            assert len(arr) == self.length, "All arrays must have same length"
-
+class Dataset:
     def __getitem__(self, index):
-        return tuple(arr[index] for arr in self.arrays)
+        raise NotImplementedError
 
     def __len__(self):
-        return self.length
+        raise NotImplementedError
 
 
 class DataLoader:
@@ -31,19 +25,14 @@ class DataLoader:
             end = start + self.batch_size
             batch_indexes = self.indexes[start:end]
 
-            # Optimized slicing for SimpleDataset if possible
-            if isinstance(self.dataset, SimpleDataset):
-                # Slice directly
+            # Optimized slicing for SimpleDataset-like objects if they support it
+            if hasattr(self.dataset, "arrays") and isinstance(self.dataset.arrays, tuple):
                 batch_data = [arr[batch_indexes] for arr in self.dataset.arrays]
-                # Convert to MLX if numpy
                 batch_data = [mx.array(x) if isinstance(x, np.ndarray) else x for x in batch_data]
                 yield tuple(batch_data)
             else:
-                # Fallback to item-by-item
                 batch = [self.dataset[i] for i in batch_indexes]
-                # Transpose list of tuples to tuple of lists
                 transposed = zip(*batch)
-                # Stack
                 stacked = []
                 for item_list in transposed:
                     if isinstance(item_list[0], np.ndarray):

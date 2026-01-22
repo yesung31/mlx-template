@@ -128,11 +128,11 @@ class Trainer:
                     model._metric_ctx.metrics = {}
                     model._metric_ctx.metadata = {}
                     loss = model.validation_step(batch, 0)
-                    
+
                     # Accumulate metrics
                     current_metrics = model._metric_ctx.metrics
                     val_metadata.update(model._metric_ctx.metadata)
-                    
+
                     for k, v in current_metrics.items():
                         if k not in val_metrics_accum:
                             val_metrics_accum[k] = []
@@ -148,7 +148,7 @@ class Trainer:
                     for k, v in metrics.items():
                         if metadata.get(k, {}).get("prog_bar", False):
                             pbar_metrics[k] = f"{v.item():.4f}"
-                    
+
                     for k, v in final_val_metrics.items():
                         if val_metadata.get(k, {}).get("prog_bar", False):
                             pbar_metrics[f"val_{k}"] = f"{v:.4f}"
@@ -168,7 +168,7 @@ class Trainer:
 
             # Reset metrics for next epoch start
             self.logged_metrics = {}
-        
+
         pbar.close()
 
     def test(self, model, datamodule):
