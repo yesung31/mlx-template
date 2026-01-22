@@ -52,19 +52,22 @@ class Trainer:
         # MLX State
         state = [model.state, optimizer.state]
 
+        import mlx.nn as nn
+
         # Compile step function
         def loss_fn(model, batch):
             model._metric_ctx.metrics = {}
             model._metric_ctx.metadata = {}
             loss = model.training_step(batch, 0)
-            return loss, (model._metric_ctx.metrics, model._metric_ctx.metadata)
+            # return metrics and metadata as well, though we have to handle them
+            return loss
 
-        loss_and_grad = mx.value_and_grad(loss_fn)
+        loss_and_grad = nn.value_and_grad(model, loss_fn)
 
         def step(batch):
-            (loss, (metrics, metadata)), grads = loss_and_grad(model, batch)
+            loss, grads = loss_and_grad(model, batch)
             optimizer.update(model, grads)
-            return loss, metrics, metadata
+            return loss, model._metric_ctx.metrics, model._metric_ctx.metadata
 
         if self.compile:
             step = mx.compile(step)

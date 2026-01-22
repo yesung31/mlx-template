@@ -1,0 +1,3 @@
+name: MNISTDataModule
+data_dir: "~/Datasets/mnist"
+batch_size: 64
